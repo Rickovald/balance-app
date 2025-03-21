@@ -13,6 +13,7 @@ interface UpdateBalanceResponse {
 describe('Интеграционные тесты обновления баланса', () => {
     beforeEach(async () => {
         // Обновляем базу для каждого теста
+        await sequelize.drop();
         await sequelize.sync({ force: true });
         await User.create({ balance: 10000 });
     });

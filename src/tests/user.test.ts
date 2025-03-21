@@ -7,8 +7,9 @@ import { beforeAll, describe, expect, it } from 'vitest';
 
 describe('Обновление баланса пользователя (нагрузочный тест)', () => {
     beforeAll(async () => {
+        await sequelize.drop();
         await sequelize.sync({ force: true });
-        await User.create({ balance: 10000 });
+        await User.create({ balance: 10000, id: 3 });
     });
 
     it('При одновременном снятии 2 единиц 10000 запросами должно пройти ровно 5000', async () => {
@@ -16,7 +17,7 @@ describe('Обновление баланса пользователя (нагр
         const errorResponses = [];
 
         for (let i = 0; i < 10000; i++) {
-            const response = await request(app).post('/users/update-balance').send({ amount: -2, userId: 1 });
+            const response = await request(app).post('/users/update-balance').send({ amount: -2, userId: 3 });
             if (response.status === 200) {
                 successResponses.push(response);
             } else {
